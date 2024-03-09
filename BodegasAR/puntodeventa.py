@@ -32,7 +32,7 @@ class PuntoDeVentaApp(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-        self.image = Image.open("C:/Users/julio/Documents/BodegaAR/BodegasAR/ar.jpg")
+        self.image = Image.open("C:/Users/julio/Documents/BodegaAR/BodegasAR/image/ar.jpg")
         self.photo = ImageTk.PhotoImage(self.image)
 
         self.conn = sqlite3.connect("bodegas.db")
