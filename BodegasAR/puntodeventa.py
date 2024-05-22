@@ -175,25 +175,25 @@ class RegistroRentasApp(tk.Frame):
         self.c.execute('''SELECT numero FROM bodegas WHERE ocupada = 0''')
         bodegas_libres = self.c.fetchall()
         return [bodega[0] for bodega in bodegas_libres]
-    
-    def rentar_bodega(self):
-        bodega_seleccionada = self.combo_bodegas.get()
-        fecha_inicio = self.entry_fecha_actual.get()
-        nombre = self.entry_nombre.get()
-        apellido_paterno = self.entry_apellido_paterno.get()
-        apellido_materno = self.entry_apellido_materno.get()
         
-        if not fecha_inicio:
-            messagebox.showerror("Error", "Por favor ingrese la fecha de inicio.")
-            return
-        
-        fecha_fin = (datetime.now() + timedelta(days=15)).strftime("%Y-%m-%d")
-        
-        self.c.execute('''UPDATE bodegas SET ocupada = 1, fecha_inicio = ?, fecha_fin = ?, nombre = ?, apellido_paterno = ?, apellido_materno = ? WHERE numero = ?''', (fecha_inicio, fecha_fin, nombre, apellido_paterno, apellido_materno, bodega_seleccionada))
-        self.conn.commit()
-        
-        self.combo_bodegas["values"] = self.obtener_bodegas_disponibles()  
-        messagebox.showinfo("Éxito", f"Bodega {bodega_seleccionada} rentada exitosamente.")
+        def rentar_bodega(self):
+            bodega_seleccionada = self.combo_bodegas.get()
+            fecha_inicio = self.entry_fecha_actual.get()
+            nombre = self.entry_nombre.get()
+            apellido_paterno = self.entry_apellido_paterno.get()
+            apellido_materno = self.entry_apellido_materno.get()
+            
+            if not fecha_inicio:
+                messagebox.showerror("Error", "Por favor ingrese la fecha de inicio.")
+                return
+            
+            fecha_fin = (datetime.now() + timedelta(days=15)).strftime("%Y-%m-%d")
+            
+            self.c.execute('''UPDATE bodegas SET ocupada = 1, fecha_inicio = ?, fecha_fin = ?, nombre = ?, apellido_paterno = ?, apellido_materno = ? WHERE numero = ?''', (fecha_inicio, fecha_fin, nombre, apellido_paterno, apellido_materno, bodega_seleccionada))
+            self.conn.commit()
+            
+            self.combo_bodegas["values"] = self.obtener_bodegas_disponibles()  
+            messagebox.showinfo("Éxito", f"Bodega {bodega_seleccionada} rentada exitosamente.")
         
     def regresar(self):
         self.controller.show_frame(PuntoDeVentaApp)
