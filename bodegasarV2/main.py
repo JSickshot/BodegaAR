@@ -15,16 +15,10 @@ class POSApp:
         self.conn = sqlite3.connect('pos.db')
         self.cursor = self.conn.cursor()
         self.root.geometry(f"{screen_width}x{screen_height}+0+0")
-        self.root.config(bg="white")  # Configura el color de fondo del marco principal como blanco
-        self.container = tk.Frame(root, bg="white")  # Configura el color de fondo del contenedor como blanco
+        self.root.config(bg="white")  
+        self.container = tk.Frame(root, bg="white")  
         self.container.pack(expand=True, fill="both")
 
-        # Agregar la imagen en la parte superior
-        image = PhotoImage(file="ar.JPEG")
-        image_label = tk.Label(self.container, image=image, bg="white")
-        image_label.pack(side="top", pady=20)
-
-        # Crear las tablas y actualizar el estado de las bodegas
         self.create_tables()
         self.update_bodega_status()
 
@@ -62,7 +56,6 @@ class POSApp:
         self.add_bodega_button = tk.Button(bodega_frame, text="Añadir Bodega", command=self.add_bodega)
         self.add_bodega_button.grid(row=6, column=0, padx=10, pady=10, sticky="ew")
 
-        # Lado derecho: Registro del arrendatario
         rental_frame = tk.Frame(self.container)
         rental_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
@@ -111,14 +104,12 @@ class POSApp:
         self.end_rental_contract_button = tk.Button(self.container, text="Finalizar Contrato", command=self.end_rental_contract)
         self.end_rental_contract_button.grid(row=5, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
 
-
-        # Lista de bodegas
         self.bodegas_list = tk.Listbox(self.container, width=80)
         self.bodegas_list.grid(row=6, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
     def view_rented_bodega_details(self):
         selected_bodega = self.bodegas_list.get(tk.ACTIVE)
-        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]  # Obtener el ID de la bodega seleccionada
+        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]  
         self.cursor.execute('SELECT * FROM bodegas WHERE id = ?', (bodega_id,))
         bodega_details = self.cursor.fetchone()
         messagebox.showinfo("Detalles de la Bodega", f"Nombre: {bodega_details[1]}\nTamaño: {bodega_details[2]}\nUbicación: {bodega_details[3]}\nEstado: {bodega_details[4]}")
@@ -128,7 +119,7 @@ class POSApp:
 
     def end_rental_contract(self):
         selected_bodega = self.bodegas_list.get(tk.ACTIVE)
-        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]  # Obtener el ID de la bodega seleccionada
+        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0] 
         self.cursor.execute('DELETE FROM rentas WHERE bodega_id = ?', (bodega_id,))
         self.cursor.execute('UPDATE bodegas SET status = "disponible" WHERE id = ?', (bodega_id,))
         self.conn.commit()
@@ -160,16 +151,14 @@ class POSApp:
         self.conn.commit()
 
     def update_bodega_status(self):
-        # Obtener la fecha actual
+        
         current_date = datetime.now().date()
         
-        # Buscar las bodegas cuya renta ha terminado
         self.cursor.execute('''
         SELECT bodega_id FROM rentas WHERE rent_end_date < ?
         ''', (current_date,))
         bodegas_to_release = self.cursor.fetchall()
         
-        # Liberar las bodegas
         for bodega in bodegas_to_release:
             self.cursor.execute('''
             UPDATE bodegas SET status = 'disponible' WHERE id = ?
