@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import messagebox
 import sqlite3
 from datetime import datetime
-from tkinter import PhotoImage
 
 
 class POSApp:
@@ -15,23 +14,20 @@ class POSApp:
         self.conn = sqlite3.connect('pos.db')
         self.cursor = self.conn.cursor()
         self.root.geometry(f"{screen_width}x{screen_height}+0+0")
-        self.root.config(bg="white")  
-        self.container = tk.Frame(root, bg="white")  
+        self.root.config(bg="white")
+        self.container = tk.Frame(root, bg="white")
         self.container.pack(expand=True, fill="both")
 
         self.create_tables()
         self.update_bodega_status()
 
-        # Contenedor para todo el contenido
-        self.container = tk.Frame(root)
+        self.container = tk.Frame(root)  # This line may not be necessary
         self.container.pack(expand=True, fill="both")
 
-        # Grid de 2x2 para organizar los elementos
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
         self.container.grid_columnconfigure(1, weight=1)
 
-        # Lado izquierdo: Registro de la bodega
         bodega_frame = tk.Frame(self.container)
         bodega_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
@@ -94,7 +90,7 @@ class POSApp:
 
         self.view_total_button = tk.Button(self.container, text="Ver Total de Bodegas", command=self.view_total_bodegas)
         self.view_total_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
-        
+
         self.view_rented_bodega_button = tk.Button(self.container, text="Ver Detalles", command=self.view_rented_bodega_details)
         self.view_rented_bodega_button.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
 
@@ -109,7 +105,7 @@ class POSApp:
 
     def view_rented_bodega_details(self):
         selected_bodega = self.bodegas_list.get(tk.ACTIVE)
-        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]  
+        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]
         self.cursor.execute('SELECT * FROM bodegas WHERE id = ?', (bodega_id,))
         bodega_details = self.cursor.fetchone()
         messagebox.showinfo("Detalles de la Bodega", f"Nombre: {bodega_details[1]}\nTamaño: {bodega_details[2]}\nUbicación: {bodega_details[3]}\nEstado: {bodega_details[4]}")
@@ -119,7 +115,7 @@ class POSApp:
 
     def end_rental_contract(self):
         selected_bodega = self.bodegas_list.get(tk.ACTIVE)
-        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0] 
+        bodega_id = selected_bodega.split("ID: ")[1].split(",")[0]
         self.cursor.execute('DELETE FROM rentas WHERE bodega_id = ?', (bodega_id,))
         self.cursor.execute('UPDATE bodegas SET status = "disponible" WHERE id = ?', (bodega_id,))
         self.conn.commit()
@@ -127,7 +123,7 @@ class POSApp:
 
     def minimize_window(self):
         self.root.geometry("")
-        
+
     def create_tables(self):
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS bodegas (
@@ -151,19 +147,15 @@ class POSApp:
         self.conn.commit()
 
     def update_bodega_status(self):
-        
         current_date = datetime.now().date()
-        
         self.cursor.execute('''
         SELECT bodega_id FROM rentas WHERE rent_end_date < ?
         ''', (current_date,))
         bodegas_to_release = self.cursor.fetchall()
-        
         for bodega in bodegas_to_release:
             self.cursor.execute('''
             UPDATE bodegas SET status = 'disponible' WHERE id = ?
             ''', (bodega[0],))
-        
         self.conn.commit()
 
     def add_bodega(self):
@@ -180,7 +172,7 @@ class POSApp:
             self.name_entry.delete(0, tk.END)
             self.size_entry.delete(0, tk.END)
             self.location_entry.delete(0, tk.END)
-            self.update_bodega_status()  # Actualizar el estado de las bodegas después de añadir una nueva
+            self.update_bodega_status()
         else:
             messagebox.showerror("Error", "Todos los campos son obligatorios")
 
@@ -204,7 +196,7 @@ class POSApp:
             self.bodega_id_entry.delete(0, tk.END)
             self.start_date_entry.delete(0, tk.END)
             self.end_date_entry.delete(0, tk.END)
-            self.update_bodega_status()  # Actualizar el estado de las bodegas después de registrar una renta
+            self.update_bodega_status()
         else:
             messagebox.showerror("Error", "Todos los campos son obligatorios")
 
@@ -227,21 +219,21 @@ class POSApp:
         FROM bodegas 
         LEFT JOIN rentas 
         ON bodegas.id = rentas.bodega_id
-    ''')
+        ''')
         bodegas_info = self.cursor.fetchall()
         for row in bodegas_info:
             if row[4] == 'ocupada':
                 end_date = row[5]
-            if end_date:
-                remaining_days = (datetime.strptime(end_date, "%Y-%m-%d") - datetime.now()).days
-                self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}, Arrendatario: {row[6]}, Días restantes de renta: {remaining_days}")
+                if end_date:
+                    remaining_days = (datetime.strptime(end_date, "%Y-%m-%d") - datetime.now()).days
+                    self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}, Arrendatario: {row[6]}, Días restantes de renta: {remaining_days}")
+                else:
+                    self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}, Arrendatario: {row[6]}")
             else:
-                self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}, Arrendatario: {row[6]}")
-        else:
-            self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}")
+                self.bodegas_list.insert(tk.END, f"ID: {row[0]}, Nombre: {row[1]}, Tamaño: {row[2]}, Ubicación: {row[3]}, Estado: {row[4]}")
 
 
 if __name__ == "__main__":
-    root= tk.Tk()
+    root = tk.Tk()
     app = POSApp(root)
     root.mainloop()
