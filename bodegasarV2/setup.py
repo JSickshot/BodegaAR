@@ -24,3 +24,7 @@ setup(
     options=options,
     executables=executables
 )
+
+
+#pip install --upgrade cx_Freeze
+#python setup.py build
