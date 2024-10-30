@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #000; /* Fondo negro */
+    color: #fff;
+    padding: 10px 20px;
+    display: flex; /* Usar flexbox para alinear elementos */
+    justify-content: space-between; /* Espacio entre el título y el logotipo */
+    align-items: center; /* Centrar verticalmente */
+}
+
+h1 {
+    margin: 0; /* Sin margen para que esté centrado */
+    text-align: center; /* Centrar texto */
+}
+
+.logo {
+    height: 50px; /* Ajusta la altura del logotipo */
+    margin-left: 20px; /* Espacio a la izquierda del logotipo */
+}
+
+.nav-container {
+    background-color: #fff; /* Fondo blanco para el recuadro */
+    border: 1px solid #000; /* Borde negro */
+    border-radius: 5px; /* Bordes redondeados */
+    margin: 20px; /* Espacio alrededor del recuadro */
+    padding: 10px; /* Espacio interno */
+}
+
+nav ul {
+    list-style-type: none; /* Sin viñetas */
+    padding: 0; /* Sin padding */
+    display: flex; /* Mostrar elementos en línea */
+    justify-content: center; /* Centrar horizontalmente */
+}
+
+nav ul li {
+    margin: 0 15px; /* Espacio entre elementos de la lista */
+}
+
+nav a {
+    text-decoration: none; /* Sin subrayado */
+    color: #000; /* Texto negro */
+}
+
+nav a:hover {
+    text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+section {
+    padding: 20px;
+    margin: 10px;
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #000; /* Fondo negro */
+    color: #fff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form input, .contact-form textarea {
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 3px;
+}
+
+.contact-form button {
+    background-color: #000; /* Fondo negro */
+    color: #fff; /* Texto blanco */
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.contact-form button:hover {
+    background-color: #555; /* Fondo gris oscuro al pasar el mouse */
+}
+
+.whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.whatsapp-icon {
+    width: 50px; /* Ajusta el tamaño según sea necesario */
+    height: auto;
+}

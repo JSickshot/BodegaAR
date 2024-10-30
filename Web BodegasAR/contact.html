@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Renta de Bodegas AR</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function handleSubmit(event) {
+            // Evitar el envío del formulario por defecto
+            event.preventDefault();
+
+            // Mostrar alerta de éxito
+            alert("El formulario se ha enviado con éxito.");
+
+            // Limpiar los campos del formulario
+            document.getElementById("contact-form").reset();
+
+            // Enviar el formulario a Google Forms
+            event.target.submit();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Renta de Bodegas AR</h1>
+        <img src="imagenes/ar.png" alt="Logotipo" class="logo">
+    </header>
+
+    <div class="nav-container">
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="about.html">Acerca de</a></li>
+                <li><a href="contact.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <section>
+        <h2>Contáctanos</h2>
+        <form id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSdzEQkHeCQaDM0ODWTMra1pajbOPyfOT1x5vyxF1yreo5ytFA/formResponse" 
+              method="POST" target="hidden_iframe" onsubmit="handleSubmit(event);">
+            <input type="text" name="entry.88580285" placeholder="Tu Nombre" required>
+            <input type="email" name="entry.194685135" placeholder="Tu Correo Electrónico" required>
+            <input type="text" name="entry.1673897710" placeholder="Número de Teléfono" required>
+            <textarea name="entry.1339823645" placeholder="Mensaje" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+        <h3>Información de Contacto</h3>
+        <p>Dirección: Calle Ejemplo 123, Ciudad, Estado</p>
+        <p>Teléfono: (123) 456-7890</p>
+        <p>Correo electrónico: <a href="mailto:info@rentabodegasar.com">info@rentabodegasar.com</a></p>
+
+        <h3>Horarios de Atención</h3>
+        <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+        
+        <h3>Síguenos en Redes Sociales</h3>
+        <ul>
+            <li><a href="https://facebook.com/rentabodegasar">Facebook</a></li>
+            <li><a href="https://instagram.com/rentabodegasar">Instagram</a></li>
+            <li><a href="https://linkedin.com/company/rentabodegasar">LinkedIn</a></li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Renta de Bodegas AR. Todos los derechos reservados.</p>
+    </footer>
+
+    <div class="whatsapp">
+        <a href="https://wa.me/6121556826" target="_blank">
+            <img src="imagenes/whatsapp.png" alt="WhatsApp" class="whatsapp-icon">
+        </a>
+    </div>
+</body>
+</html>
