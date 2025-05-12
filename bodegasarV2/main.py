@@ -11,17 +11,14 @@ class POSApp:
         self.root = root
         self.root.title("Bodegas AR - Gestión de Arrendatarios")
         self.root.configure(bg="white")
-
         
         self.conn = sqlite3.connect("bodegas.db")
         self.cursor = self.conn.cursor()
         self.create_tables()
 
-        # Título
         title = Label(root, text="Registro de Arrendatarios - Bodegas AR", font=("Arial", 16, "bold"), bg="white", fg="black")
         title.pack(pady=10)
 
-        # Frame del formulario
         form_frame = Frame(root, bg="white")
         form_frame.pack(pady=10)
 
@@ -79,8 +76,9 @@ class POSApp:
         """)
         self.conn.commit()
 
-        # Bodegas predefinidas
-        bodega_names = ["Bodega A1", "Bodega A2", "Bodega A3", "Bodega B1"]
+        bodega_names = ["Bodega A1", "Bodega A2", "Bodega B1", "Bodega B2", "Bodegas C1",  "Bodegas C2",  "Bodegas D1", 
+         "Bodegas D2",  "Bodegas E1",  "Bodegas E2",  "Bodegas F1",  "Bodegas F"]
+        
         for name in bodega_names:
             try:
                 self.cursor.execute("INSERT INTO bodegas (nombre) VALUES (?)", (name,))
@@ -118,7 +116,7 @@ class POSApp:
         self.export_to_pdf(nombre, telefono, bodega_nombre, start, end)
         self.send_notification(nombre, telefono, end)
 
-        messagebox.showinfo("Éxito", "Arrendatario registrado correctamente.")
+        messagebox.showinfo("Agregado correctamente")
         self.load_bodega_status()
         self.clear_form()
 
@@ -132,15 +130,6 @@ class POSApp:
         c.drawString(100, 650, f"Fecha fin: {end}")
         c.save()
 
-    def send_notification(self, nombre, telefono, end_date_str):
-        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
-        today = datetime.today()
-        diff = (end_date - today).days
-
-        if diff in [30, 15]:
-            print(f"ALERTA: El contrato de {nombre} vence en {diff} días.")
-
-            # Aquí podrías integrar Twilio o un servicio de email para enviar notificación real
 
     def load_bodega_status(self):
         self.tree.delete(*self.tree.get_children())
